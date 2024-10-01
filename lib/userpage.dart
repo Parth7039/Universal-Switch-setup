@@ -54,15 +54,25 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
       _encryptedMessage = ""; // Clear previous encrypted message
     });
 
+    // Create a request body with the data and algorithm
+    final body = json.encode({
+      'data': message,
+      'algorithm': 'rsa', // or 'aes' or 'des' depending on what you want to use
+    });
+
     final response = await http.post(
-      Uri.parse(encryptUrl),
+      Uri.parse("http://192.168.139.96:5001/encrypt"),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({'message': message}),
+      body: body,
     );
+
+    // Print the status code and response body
+    print('Status code: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
       setState(() {
-        _encryptedMessage = json.decode(response.body)['encrypted_message'];
+        _encryptedMessage = json.decode(response.body)['encrypted_data'];
       });
     } else {
       print('Failed to encrypt message');
@@ -72,6 +82,7 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
       isEncrypting = false;
     });
   }
+
 
   // Function to call the decryption API
   Future<void> decryptMessage(String encryptedMessage) async {
@@ -209,7 +220,7 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
                                     color: Colors.greenAccent,
                                     fontFamily: 'Courier',
                                   ),
-                                  speed: Duration(milliseconds: 50),
+                                  speed: Duration(milliseconds: 10),
                                 ),
                               ],
                               isRepeatingAnimation: false,

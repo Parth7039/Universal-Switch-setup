@@ -96,7 +96,7 @@ class RolePage extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Adminlogin()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AdminLogin()));
               },
             ),
           ],
