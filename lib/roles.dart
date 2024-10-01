@@ -1,3 +1,4 @@
+import 'package:codeverse/adminlogin.dart';
 import 'package:codeverse/userpage.dart';
 import 'package:flutter/material.dart';
 
@@ -95,7 +96,7 @@ class RolePage extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Adminpage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Adminlogin()));
               },
             ),
           ],
