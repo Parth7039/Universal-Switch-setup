@@ -15,16 +15,15 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
   String _decryptedMessage = "No message Decrypted";
   bool isEncrypting = false;
   bool isDecrypting = false;
-  late AnimationController _fadeSlideAnimationController;
-  late Animation<double> _fadeAnimation;
+  late AnimationController _slideAnimationController;
   late Animation<double> _slideAnimation;
 
   // WebSocket channel for receiving messages
   late WebSocketChannel channel;
 
   // API URLs
-  final String encryptUrl = "http://localhost:5000/encrypt";
-  final String decryptUrl = "http://localhost:5000/decrypt";
+  final String encryptUrl = "http://192.168.67.198:5001/encrypt";
+  final String decryptUrl = "http://192.168.67.198:5002/decrypt";
 
   @override
   void initState() {
@@ -40,24 +39,29 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
       });
     });
 
-    // Initialize animation controller for fading and sliding the encrypted message
-    _fadeSlideAnimationController = AnimationController(
+    // Initialize animation controller for sliding the encrypted message
+    _slideAnimationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
     );
 
-    _fadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(parent: _fadeSlideAnimationController, curve: Curves.easeOut),
+    _slideAnimation = Tween<double>(begin: 0.0, end: -50.0).animate(
+      CurvedAnimation(parent: _slideAnimationController, curve: Curves.easeOut),
     );
 
-    _slideAnimation = Tween<double>(begin: 0.0, end: -50.0).animate(
-      CurvedAnimation(parent: _fadeSlideAnimationController, curve: Curves.easeOut),
-    );
+    // Add listener to show decrypted message once the slide animation is finished
+    _slideAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          _decryptedMessage = _messageController.text;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
-    _fadeSlideAnimationController.dispose();
+    _slideAnimationController.dispose();
     channel.sink.close(); // Close the WebSocket connection
     super.dispose();
   }
@@ -84,8 +88,9 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
     if (response.statusCode == 200) {
       setState(() {
         _encryptedMessage = json.decode(response.body)['encrypted_data'];
-        _decryptedMessage = _messageController.text; // Display entered text after encryption
+        _decryptedMessage = ""; // Clear the decrypted message until animation finishes
       });
+      _slideAnimationController.forward(); // Start the animation
     } else {
       print('Failed to encrypt message');
     }
@@ -185,26 +190,29 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
                     ),
                     SizedBox(height: 10),
                     AnimatedBuilder(
-                      animation: _fadeSlideAnimationController,
+                      animation: _slideAnimationController,
                       builder: (context, child) {
-                        return Opacity(
-                          opacity: _fadeAnimation.value,
-                          child: Transform.translate(
-                            offset: Offset(_slideAnimation.value, 0),
+                        return Transform.translate(
+                          offset: Offset(_slideAnimation.value, 0),
+                          child: Container(
+                            width: double.infinity,
                             child: _encryptedMessage.isNotEmpty
-                                ? AnimatedTextKit(
-                              animatedTexts: [
-                                TypewriterAnimatedText(
-                                  _encryptedMessage,
-                                  textStyle: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.greenAccent,
-                                    fontFamily: 'Courier',
+                                ? SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: AnimatedTextKit(
+                                animatedTexts: [
+                                  TypewriterAnimatedText(
+                                    _encryptedMessage,
+                                    textStyle: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.greenAccent,
+                                      fontFamily: 'Courier',
+                                    ),
+                                    speed: Duration(milliseconds: 50),
                                   ),
-                                  speed: Duration(milliseconds: 10),
-                                ),
-                              ],
-                              isRepeatingAnimation: false,
+                                ],
+                                isRepeatingAnimation: false,
+                              ),
                             )
                                 : SelectableText(
                               "No message encrypted yet.",
@@ -265,7 +273,7 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
                         ? AnimatedTextKit(
                       animatedTexts: [
                         TypewriterAnimatedText(
-                          _messageController.text,
+                          _decryptedMessage,
                           textStyle: TextStyle(
                             fontSize: 16,
                             color: Colors.greenAccent,
