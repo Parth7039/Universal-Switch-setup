@@ -72,6 +72,18 @@ class _AdminpageState extends State<Adminpage> {
           'Admin Configuration',
           style: TextStyle(color: Colors.greenAccent),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.info_outline,
+              color: Colors.greenAccent,
+            ),
+            onPressed: () {
+              _showCustomSnackbar(
+                  'RSA is best for key exchange. AES is fast and efficient for data encryption.');
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Padding(
@@ -140,11 +152,18 @@ class _AdminpageState extends State<Adminpage> {
                 ),
               ),
               SizedBox(height: 20), // Space before button
+              if (selectedAlgorithm != null)
+                Text(
+                  selectedAlgorithm == 'rsa'
+                      ? 'RSA is best for key exchange.'
+                      : 'AES is efficient for fast data encryption.',
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+              SizedBox(height: 20), // Space for the description
               ElevatedButton(
                 onPressed: selectedAlgorithm != null && !isLoading
                     ? () {
                   // Logic for applying the selected algorithm
-                  print('Algorithm applied: $selectedAlgorithm');
                   _changeAlgorithm(selectedAlgorithm!);
                 }
                     : null, // Disable if no selection or loading

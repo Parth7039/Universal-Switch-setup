@@ -189,42 +189,28 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
                       ),
                     ),
                     SizedBox(height: 10),
-                    AnimatedBuilder(
-                      animation: _slideAnimationController,
-                      builder: (context, child) {
-                        return Transform.translate(
-                          offset: Offset(_slideAnimation.value, 0),
-                          child: Container(
-                            width: double.infinity,
-                            child: _encryptedMessage.isNotEmpty
-                                ? SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: AnimatedTextKit(
-                                animatedTexts: [
-                                  TypewriterAnimatedText(
-                                    _encryptedMessage,
-                                    textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.greenAccent,
-                                      fontFamily: 'Courier',
-                                    ),
-                                    speed: Duration(milliseconds: 50),
-                                  ),
-                                ],
-                                isRepeatingAnimation: false,
-                              ),
-                            )
-                                : SelectableText(
-                              "No message encrypted yet.",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.greenAccent,
-                                fontFamily: 'Courier',
-                              ),
-                            ),
+                    _encryptedMessage.isNotEmpty
+                        ? AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(
+                          _encryptedMessage,
+                          textStyle: TextStyle(
+                            fontSize: 16,
+                            color: Colors.greenAccent,
+                            fontFamily: 'Courier',
                           ),
-                        );
-                      },
+                          speed: Duration(milliseconds: 50),
+                        ),
+                      ],
+                      isRepeatingAnimation: false, // Only show once
+                    )
+                        : SelectableText(
+                      "No message encrypted yet.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.greenAccent,
+                        fontFamily: 'Courier',
+                      ),
                     ),
                   ],
                 ),
