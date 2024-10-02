@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // For JSON encoding
 
 class Adminpage extends StatefulWidget {
   const Adminpage({super.key});
@@ -9,6 +11,39 @@ class Adminpage extends StatefulWidget {
 
 class _AdminpageState extends State<Adminpage> {
   String? selectedAlgorithm; // Variable to hold the selected algorithm
+  bool isLoading = false; // Track loading state for button
+
+  // Function to send the selected algorithm to the server
+  Future<void> _changeAlgorithm(String algorithm) async {
+    final url = Uri.parse('http://192.168.67.198:5001/change-algo');
+    final body = json.encode({"algo": algorithm}); // JSON body
+
+    try {
+      setState(() {
+        isLoading = true; // Show loading
+      });
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json', // Set headers for JSON
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        _showCustomSnackbar('Algorithm applied: $algorithm');
+      } else {
+        _showCustomSnackbar('Failed to apply algorithm. Server error.');
+      }
+    } catch (e) {
+      _showCustomSnackbar('Error: ${e.toString()}');
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loading
+      });
+    }
+  }
 
   void _showCustomSnackbar(String message) {
     final snackBar = SnackBar(
@@ -77,7 +112,7 @@ class _AdminpageState extends State<Adminpage> {
                     ),
                   ),
                   dropdownColor: Colors.black, // Background color of dropdown
-                  items: <String>['RSA', 'AES'] // Options for the dropdown
+                  items: <String>['rsa', 'aes'] // Options for the dropdown
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -94,8 +129,10 @@ class _AdminpageState extends State<Adminpage> {
                     setState(() {
                       selectedAlgorithm = newValue; // Update selected algorithm
                     });
-                    // Show custom styled snackbar
-                    _showCustomSnackbar('Selected: $newValue');
+                    if (newValue != null) {
+                      // Call the API to change the algorithm
+                      _changeAlgorithm(newValue);
+                    }
                   },
                   style: TextStyle(color: Colors.greenAccent), // Text style
                   iconEnabledColor: Colors.greenAccent, // Icon color
@@ -104,14 +141,18 @@ class _AdminpageState extends State<Adminpage> {
               ),
               SizedBox(height: 20), // Space before button
               ElevatedButton(
-                onPressed: selectedAlgorithm != null
+                onPressed: selectedAlgorithm != null && !isLoading
                     ? () {
                   // Logic for applying the selected algorithm
                   print('Algorithm applied: $selectedAlgorithm');
-                  _showCustomSnackbar('Algorithm applied: $selectedAlgorithm');
+                  _changeAlgorithm(selectedAlgorithm!);
                 }
-                    : null, // Disable if no selection
-                child: Text(
+                    : null, // Disable if no selection or loading
+                child: isLoading
+                    ? CircularProgressIndicator(
+                  color: Colors.black,
+                )
+                    : Text(
                   'Apply',
                   style: TextStyle(color: Colors.black),
                 ),
