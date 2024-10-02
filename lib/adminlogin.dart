@@ -1,3 +1,4 @@
+import 'package:codeverse/adminpage.dart';
 import 'package:flutter/material.dart';
 import 'dashboard.dart'; // Import your DashboardPage
 
@@ -51,7 +52,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     // Navigate directly to DashboardPage
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => DashboardPage()),
+                      MaterialPageRoute(builder: (context) => Adminpage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
