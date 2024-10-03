@@ -15,7 +15,7 @@ class _AdminpageState extends State<Adminpage> {
 
   // Function to send the selected algorithm to the server
   Future<void> _changeAlgorithm(String algorithm) async {
-    final url = Uri.parse('http://192.168.67.198:5001/change-algo');
+    final url = Uri.parse('http://192.168.183.96:5001/change-algo');
     final body = json.encode({"algo": algorithm}); // JSON body
 
     try {

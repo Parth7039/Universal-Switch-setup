@@ -22,8 +22,8 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
   late WebSocketChannel channel;
 
   // API URLs
-  final String encryptUrl = "http://192.168.67.198:5001/encrypt";
-  final String decryptUrl = "http://192.168.67.198:5002/decrypt";
+  final String encryptUrl = "http://192.168.183.96:5001/encrypt";
+  final String decryptUrl = "http://192.168.183.96:5002/decrypt";
 
   @override
   void initState() {
@@ -80,7 +80,7 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
     });
 
     final response = await http.post(
-      Uri.parse("http://192.168.67.198:5001/encrypt"),
+      Uri.parse("http://192.168.183.96:5001/encrypt"),
       headers: {'Content-Type': 'application/json'},
       body: body,
     );
