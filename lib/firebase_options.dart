@@ -40,7 +40,7 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
+  static FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBZhCd6C9pXVNTIKTXEEpQFyEyZt-HDAEg',
     appId: '1:435909058123:web:7ab36134423eaa9ea037ce',
     messagingSenderId: '435909058123',
@@ -49,7 +49,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'codeverse-68172.appspot.com',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
+  static  FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBfaSEOTBFQVczHlFupyMgxggd-7engr3w',
     appId: '1:435909058123:android:6a4b4141f94cc4fba037ce',
     messagingSenderId: '435909058123',
@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'codeverse-68172.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
+  static  FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyABZsfYvtoB1l64zfAeJ1JNLa6Y8JUzMg8',
     appId: '1:435909058123:ios:48a484b9d4dfa456a037ce',
     messagingSenderId: '435909058123',
@@ -66,7 +66,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.codeverse',
   );
 
-  static const FirebaseOptions macos = FirebaseOptions(
+  static  FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyABZsfYvtoB1l64zfAeJ1JNLa6Y8JUzMg8',
     appId: '1:435909058123:ios:48a484b9d4dfa456a037ce',
     messagingSenderId: '435909058123',
@@ -75,7 +75,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.codeverse',
   );
 
-  static const FirebaseOptions windows = FirebaseOptions(
+  static  FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyBZhCd6C9pXVNTIKTXEEpQFyEyZt-HDAEg',
     appId: '1:435909058123:web:bae4df601fd0b44ba037ce',
     messagingSenderId: '435909058123',

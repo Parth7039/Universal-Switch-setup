@@ -1,8 +1,8 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart'; // Import WebSocket package
-import 'package:animated_text_kit/animated_text_kit.dart';
 
 class UserPage extends StatefulWidget {
   @override
